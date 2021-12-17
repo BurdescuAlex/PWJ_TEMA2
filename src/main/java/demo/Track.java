@@ -1,14 +1,6 @@
 package demo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -18,6 +10,10 @@ public class Track {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    private Room room;
 
     @Column(name="title", nullable = false)
     private String title;
@@ -35,10 +31,11 @@ public class Track {
     public Track() {
 
     }
-    public Track(String title, String description, Person speaker) {
+    public Track(String title, String description, Person speaker, Room room) {
         this.title = title;
         this.description = description;
         this.speaker = speaker;
+        this.room = room;
     }
 
     public long getId() {
@@ -61,9 +58,13 @@ public class Track {
         return attendees;
     }
 
+    public Room getRoom() { return room; }
+
+
     public void update (Track track) {
         this.title = track.getTitle();
         this.description = track.getDescription();
         this.speaker = track.getSpeaker();
+        this.room = track.room;
     }
 }
